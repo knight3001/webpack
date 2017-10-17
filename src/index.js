@@ -1,18 +1,27 @@
 import _ from 'lodash';
-import printMe from './print.js';
+import Print from './print';
+import './styles.css';
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Looks like we are in development mode!');
+}
 
 function component() {
-    var element = document.createElement('div');
-    var btn = document.createElement('button');
-  
-    // Lodash, now imported by this script
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+  var element = document.createElement('div');
 
-    btn.innerHTML = 'Click me and check the console!';
-    btn.onclick = printMe;
-    element.appendChild(btn);
-    
-    return element;
-  }
-  
-  document.body.appendChild(component());
+  // Lodash, now imported by this script
+  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+  element.onclick = Print.bind(null, 'Print webpack!');
+
+  return element;
+}
+
+document.body.appendChild(component());
+
+fetch('https://jsonplaceholder.typicode.com/users')
+  .then(response => response.json())
+  .then(json => {
+    console.log('We retrieved some data! AND we\'re confident it will work on a variety of browser distributions.')
+    console.log(json)
+  })
+  .catch(error => console.error('Something went wrong when fetching this data: ', error))
